@@ -32,9 +32,7 @@ import type { Workout } from './workout';
 import { Badge } from "@/components/ui/badge";
 import { safeFetchJson } from './use-fetch-inventory';
 
-type PropsType = { cart: Workout[] };
-
-type OrderType = string[][];
+type PropsType = { workouts: Workout[] };
 
 type WorkoutResponseType = {
   status: 'confirmed' | 'canceled';
@@ -77,7 +75,7 @@ function ViewWorkouts() {
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell colSpan={4}>Total time</TableCell>
+                <TableCell colSpan={1}>Total time</TableCell>
                 <TableCell className="text-right tabular-nums">
                   {workouts.reduce((total, workout) =>
                     total + workout.totalDuration()
@@ -99,7 +97,7 @@ function ViewWorkouts() {
  * static content, rendered when the file is loaded.
  */
 function SaveWorkotButton() {
-  const {workouts, clearWorkout } = useOutletContext<ContextType>();
+  const {workouts, clearWorkouts } = useOutletContext<ContextType>();
   const [confirmation, setConfirmation] = useState<WorkoutResponseType | undefined>(undefined);
   const navigate = useNavigate();
 
@@ -107,7 +105,7 @@ function SaveWorkotButton() {
     const workoutData = workouts.map((workout) =>
       Object.keys(workout.getExercises())
     );
-    const conf = await safeFetchJson<OrderResponseType>(
+    const conf = await safeFetchJson<WorkoutResponseType>(
       'http://localhost:8080/workouts', 
       {
         method: 'POST',
@@ -123,7 +121,7 @@ function SaveWorkotButton() {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button onClick={order}>Save Workout</Button>
+        <Button onClick={saveToServer}>Save Workout</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

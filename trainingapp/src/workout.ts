@@ -1,4 +1,4 @@
-import { type IngredientInfo, type PartialExerciseInventory } from './exercise-inventory.js';
+
 import { v4 as uuidv4 } from "uuid";
 
 type ExerciseInfo = {
@@ -26,7 +26,7 @@ class Workout {
   /**
    * @returns a new salad object with the ingredient @name added.
    */
-  add(name: string, info: IngredientInfo): Workout {
+  add(name: string, info: ExerciseInfo): Workout {
     const newExercises = {
       ...this.exercises,
       [name]: info,

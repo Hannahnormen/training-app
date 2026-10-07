@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
-import NewWorkoutInfobox from "./new-workout-infobox";
 
 const routerConfig: RouteObject[] = [
   {
@@ -26,12 +25,6 @@ const routerConfig: RouteObject[] = [
       {
         path: "view-workout",
         Component: ViewWorkouts,
-        children: [
-            {
-                path: "new/:uuid",
-                Component: NewSaladInfobox,
-            },
-        ],
       },
       {
         path: "*",

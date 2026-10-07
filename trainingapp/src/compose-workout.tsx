@@ -11,7 +11,6 @@ import {
   CardContent,
   CardHeader,
 } from './components/ui/card';
-import type { ExerciseType, ExerciseInventory, PartialExerciseInventory } from '@/exercise-inventory';
 import { useState } from 'react';
 import { Button } from './components/ui/button';
 import { Workout } from '@/workout';
@@ -51,8 +50,7 @@ function ComposeWorkout( ) {
     value: ex.name,
     label: ex.name,
   }));
-
-  function handleSubmit(event: React.SubmitEvent) {
+  function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setShowError(true);
    

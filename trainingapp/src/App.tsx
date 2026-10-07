@@ -12,7 +12,7 @@ function App() {
   
   return (
     <div className="grid grid-rows-1 gap-4 w-full max-w-5xl">
-      <h1 className="text-3xl font-bold text-center ">Min egen salladsbar</h1>
+      <h1 className="text-3xl font-bold text-center ">Our workout app</h1>
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
