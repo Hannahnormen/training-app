@@ -1,4 +1,5 @@
 import { useFetchExercises } from './use-fetch-exercises';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -45,6 +46,8 @@ function ComposeWorkout( ) {
   const [cooldown, setCooldown] = useState<ExerciseOption|null>(null);
   const [showError, setShowError] = useState(false);
 
+  console.log(selectedExercise);
+  
   const navigate = useNavigate();
   
   //Gör API-övningar till select alternativ
@@ -111,6 +114,46 @@ function ComposeWorkout( ) {
             onValueChange={setWarmup}
             showError={showError}
           />
+
+          <div className="my-4">
+            <FieldLabel className="text-base font-semibold">
+              Choose at least two exercises
+            </FieldLabel>
+            {showError && Object.keys(selectedExercise).length < 2 && (
+              <FieldError>Choose at least two exercises.</FieldError>
+            )}
+
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {exerciseOptions.map((exercise) => (
+                <div 
+                  key={exercise.value}
+                  className="flex items-center gap-2"
+                >
+                <Checkbox 
+                  id={exercise.value} 
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      setExercises({
+                        ...selectedExercise,
+                        [exercise.value]: exercise,
+                      })
+                    } else {
+                      const remainingExercises = Object.fromEntries(
+                        Object.entries(selectedExercise)
+                        .filter(([key]) => key !== exercise.value)
+                      );
+
+                      setExercises(remainingExercises);
+                    }
+                  }}
+                />
+                <label htmlFor={exercise.value}>
+                  {exercise.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
 
       
        
