@@ -1,10 +1,10 @@
-type ExerciseType = 'warmup' | 'exercise' | 'cooldown';
-
-interface ExerciseInfo {
-  readonly type: ExerciseType;
-  readonly duration: number;
-  readonly beginnerFriendly?: boolean;
-  readonly highIntensity?: boolean;
+interface Exercise {
+  readonly name: string;
+  readonly type: string;
+  readonly muscle: string;
+  readonly equipment: string;
+  readonly difficulty: string;
+  readonly instructions: string;
 }
 
 const baseExerciseInventory = {
@@ -12,8 +12,8 @@ const baseExerciseInventory = {
 };
 type ExerciseName = keyof typeof baseExerciseInventory;
 type ExerciseInventory = Readonly<
-  Record<ExerciseName, ExerciseInfo> & {
-    [otherName: string]: ExerciseInfo;
+  Record<ExerciseName, Exercise> & {
+    [otherName: string]: Exercise;
   }
 >;
 const exerciseInventory: ExerciseInventory = baseExerciseInventory as ExerciseInventory;
@@ -31,7 +31,6 @@ deepFreeze(baseExerciseInventory);
 export {
   exerciseInventory,
   type ExerciseInventory,
-  type ExerciseType,
-  type ExerciseInfo,
+  type Exercise,
   type PartialExerciseInventory,
 };
