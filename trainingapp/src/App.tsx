@@ -24,11 +24,11 @@ function App() {
 
     <div className="grid grid-rows-1 gap-4 w-full max-w-5xl">
       <h1 className="text-2xl font-extrabold text-center py-8">Our workout app</h1>
-      <NavigationMenu className="w-full justify-center">
-        <NavigationMenuList>
+      <NavigationMenu>
+        <NavigationMenuList className="flex gap-1">
           <NavigationMenuItem>
              <NavigationMenuLink render={<Link to="/" />}>
-                <span className="cursor-pointer"></span>
+                <span className="cursor-pointer text-sm font-medium"></span>
                 Home
               </NavigationMenuLink>
           </NavigationMenuItem>
@@ -45,7 +45,7 @@ function App() {
         </NavigationMenuList>
       </NavigationMenu>
 
-      <div className="W-full">
+      <div className="W-full overflow-hidden shadow-lg">
       <img
         src="https://t3.ftcdn.net/jpg/04/29/35/62/360_F_429356296_CVQ5LkC6Pl55kUNLqLisVKgTw9vjyif1.jpg"
         className="w-full"

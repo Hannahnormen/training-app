@@ -24,7 +24,7 @@ function Home() {
         </CardDescription>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="flex gap-3">
         <Button size="lg">
           <Link to="/compose-workout">
             Create Workouts
