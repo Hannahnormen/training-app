@@ -1,3 +1,4 @@
+import { useFetchExercises } from './use-fetch-exercises';
 import {
   Select,
   SelectContent,
@@ -32,11 +33,12 @@ type ExerciseOption = {
 }
 
 type PropType = {
-  exercises: any[]; //Här ska vi hämta datan från APIt
   addWorkout: (workout: Workout) => void;
 };
+
 function ComposeWorkout( ) {
-  const {exercises, addWorkout}= useOutletContext<PropType>();
+  const { addWorkout } = useOutletContext<PropType>();
+  const exercises = useFetchExercises();
 
   const [warmup, setWarmup] = useState<ExerciseOption|null>(null);
   const [selectedExercise, setExercises] = useState<Record<string, ExerciseOption>>({});

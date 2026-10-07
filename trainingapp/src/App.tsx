@@ -1,5 +1,7 @@
 
 import { Link, Outlet} from "react-router"
+import { useState } from 'react';
+import { Workout } from './workout';
 import { 
   NavigationMenu, 
   NavigationMenuList, 
@@ -9,7 +11,14 @@ import {
 
 
 function App() {
+  // React ska komma ihåg alla skapade workouts
+  const [workouts, setWorkouts] = useState<Workout[]>([]);
   
+  function addWorkout(workout: Workout) {
+    /** när vi får en ny Workout, skapa en array som innehåller alla gamla workouts + den nya */
+    setWorkouts([...workouts, workout]);
+  }
+
   return (
     <>
 
@@ -42,7 +51,7 @@ function App() {
       />
     </div>
       <main>
-        <Outlet />
+        <Outlet context={{ workouts, addWorkout }} />
       </main>
     </div>
     </>
