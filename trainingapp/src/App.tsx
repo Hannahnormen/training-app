@@ -1,5 +1,5 @@
 
-import { Link} from "react-router"
+import { Link, Outlet} from "react-router"
 import { 
   NavigationMenu, 
   NavigationMenuList, 
@@ -32,6 +32,10 @@ function App() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
+
+      <main>
+        <Outlet />
+      </main>
     </div>
   );
 }

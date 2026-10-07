@@ -30,7 +30,7 @@ import {
 } from './components/ui/table';
 import type { Workout } from './workout';
 import { Badge } from "@/components/ui/badge";
-import { safeFetchJson } from './use-fetch-inventory';
+import { safeFetchJson } from './use-fetch-exercises';
 
 type PropsType = { workouts: Workout[] };
 
@@ -106,7 +106,7 @@ function SaveWorkotButton() {
       Object.keys(workout.getExercises())
     );
     const conf = await safeFetchJson<WorkoutResponseType>(
-      'http://localhost:8080/workouts', 
+      'http://localhost:8080/view-workouts', 
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json'},
