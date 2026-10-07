@@ -14,11 +14,12 @@ function App() {
     <>
 
     <div className="grid grid-rows-1 gap-4 w-full max-w-5xl">
-      <h1 className="text-3xl font-bold text-center ">Our workout app</h1>
-      <NavigationMenu>
+      <h1 className="text-2xl font-extrabold text-center py-8">Our workout app</h1>
+      <NavigationMenu className="w-full justify-center">
         <NavigationMenuList>
           <NavigationMenuItem>
              <NavigationMenuLink render={<Link to="/" />}>
+                <span className="cursor-pointer"></span>
                 Home
               </NavigationMenuLink>
           </NavigationMenuItem>
@@ -34,7 +35,7 @@ function App() {
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      
+
       <div className="W-full">
       <img
         src="https://t3.ftcdn.net/jpg/04/29/35/62/360_F_429356296_CVQ5LkC6Pl55kUNLqLisVKgTw9vjyif1.jpg"
