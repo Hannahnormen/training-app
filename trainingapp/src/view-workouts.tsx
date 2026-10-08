@@ -19,20 +19,15 @@ import {
   CardHeader,
   CardTitle,
 } from './components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableFooter,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from './components/ui/table';
+
 import type { Workout } from './workout';
 import { Badge } from "@/components/ui/badge";
 import { safeFetchJson } from './use-fetch-exercises';
 
-type PropsType = { workouts: Workout[] };
+type PropsType = { 
+  workouts: Workout[] 
+  clearWorkouts?: () => void;
+};
 
 type WorkoutResponseType = {
   status: 'confirmed' | 'canceled';
@@ -47,57 +42,85 @@ type ContextType = { workouts: Workout[]; clearWorkouts(): void };
 function ViewWorkouts() {
   const { workouts } = useOutletContext<PropsType>();
   const { uuid } = useParams();
+  const navigate = useNavigate();
   return (
-    <>
-      <Card className="w-full p-3">
-        {cardHead}
-        <CardContent>
-          <Outlet context={{ workouts }} />
-          <Table>
-            {tableHead}
-            <TableBody>
-              {workouts.map( (workout) => (
-              <TableRow key={workout.uuid}>
-                <TableCell className="font-normal">
-                    {Object.keys(workout.getExercises()).join(', ')}
-                    {workout.uuid === uuid && (
-                      <Badge>New</Badge>
-                    )}
-                </TableCell>
+   
+    <div className='w-full'>
+      <div className='text-center'>
+        <h2 className='text-3xl font-extrabold'>My Workouts</h2>
+        <p>Here you can see the workouts you have created</p>
+      </div>
+      {workouts.length === 0 && (
+        <Card className='text-center'>
+          You have no saved workouts yet. Go to "Create Workout" to create one!
+        </Card>
+      )}
+      <div className='grid grid-cols-1'>
+        {workouts.map((workout, index) => {
+          const exercises = Object.values(workout.getExercises());
+          const totalDuration = workout.totalDuration();
+          const isNew = workout.uuid === uuid;
 
-                <TableCell>
-                  <div>
-                    {workout.totalDuration()} min
+          return (
+            <Card key={workout.uuid || index}>
+              <CardHeader>
+                <div> 
+                  <CardTitle className='text-xl items-center'>
+                    Workout #{index + 1}
+                    {isNew && <Badge>New</Badge>}
+                  </CardTitle>
+                  <CardDescription>
+                    Total {exercises.length} exercises
+                  </CardDescription>
+                </div>
+
+                <div className='text-right'>
+                  <span>
+                    {totalDuration} min
+                  </span>
+                  <p>Total time for workout</p>
+                </div>
+            </CardHeader>
+
+            <CardContent>
+              <h4>
+                Exercices:
+              </h4>
+              <div className="flex flex-col gap-2">
+                {exercises.map((exercise, index) =>(
+                  <div key={index} className='flex justify-between items-center'>
+                    <div>
+                      <span>
+                        {exercise.name}
+                      </span>
+                      <span>
+                        {exercise.category || "Exercise"}
+                      </span>
+                    </div>
+
+                    <Badge>
+                      {exercise.duration ?? 0} min
+                    </Badge>
                   </div>
-                </TableCell>
-              </TableRow> 
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={1}>Total time</TableCell>
-                <TableCell className="text-right tabular-nums">
-                  {workouts.reduce((total, workout) =>
-                    total + workout.totalDuration()
-                  , 0) 
-                  } min
-                </TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </CardContent>
-      </Card>
-    </>
+                ))}
+              </div>
+            </CardContent>
+            <Button onClick={() => navigate(`/do-workout/${workout.uuid}`)}>Do workout</Button>
+          </Card>
+          );
+        })}
+      </div>
+    </div>
   );
 }
+
 
 
 
 /*
  * static content, rendered when the file is loaded.
  */
-function SaveWorkotButton() {
-  const {workouts, clearWorkouts } = useOutletContext<ContextType>();
+function SaveWorkotButton({workouts, clearWorkouts}: { workouts: Workout[]; clearWorkouts?: () => void}) {
   const [confirmation, setConfirmation] = useState<WorkoutResponseType | undefined>(undefined);
   const navigate = useNavigate();
 
@@ -133,8 +156,11 @@ function SaveWorkotButton() {
         <AlertDialogFooter>
           <AlertDialogCancel
             onClick={() => {
-              clearWorkouts();
-              navigate('/view-workout');
+              if (clearWorkouts) {
+                clearWorkouts();
+                navigate('/view-workout');
+              }
+              
             }}
           >
             Continue
@@ -147,19 +173,5 @@ function SaveWorkotButton() {
 
 }
   
-const tableHead = (
-  <TableHeader>
-    <TableRow>
-      <TableHead className="font-semibold">Exercises</TableHead>
-      <TableHead className="font-semibold text-center">Time</TableHead>
-    </TableRow>
-  </TableHeader>
-);
-const cardHead = (
-  <CardHeader>
-    <CardTitle>My Workouts</CardTitle>
-    <CardDescription>Here are all the exercises you have created</CardDescription>
-    <CardAction><SaveWorkotButton /></CardAction>
-  </CardHeader>
-);
+
 export default ViewWorkouts;

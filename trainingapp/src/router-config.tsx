@@ -4,6 +4,7 @@ import {Button} from "@/components/ui/button"
 import { createBrowserRouter, type RouteObject } from "react-router";
 import ComposeWorkout from "./compose-workout"
 import ViewWorkouts from "./view-workouts"
+import DoWorkout from "./DoWorkout"
 import App from "./App";
 import {
   Card,
@@ -62,6 +63,10 @@ const routerConfig: RouteObject[] = [
       {
         path: "*",
         Component: PageNotFound,
+      },
+      {
+        path: "do-workout/:uuid",
+        Component: DoWorkout,
       },
     ],
   },
