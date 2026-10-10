@@ -17,11 +17,14 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 
-type PropsType = { workouts: Workout[]};
+type PropsType = { 
+    workouts: Workout[];
+    removeWorkout: (uuid: string) => void;
+};
 
 function DoWorkout() {
-    const {workouts} = useOutletContext<PropsType>();
-    const {uuid} = useParams();
+    const { workouts, removeWorkout } = useOutletContext<PropsType>();
+    const { uuid } = useParams();
     const navigate = useNavigate();
 
     const workout = workouts.find((w) => w.uuid === uuid);
@@ -97,12 +100,21 @@ function DoWorkout() {
 
                     <AlertDialogFooter>
                         <AlertDialogCancel
+                            className="bg-green-500 text-white hover:bg-green-600 hover:text-white dark:bg-green-500 dark:text-white dark:hover:bg-green-600"
                             onClick={() => navigate('/view-workouts')}
                         >
                             Keep Workout
                         </AlertDialogCancel>
 
-                        <AlertDialogAction>
+                        <AlertDialogAction
+                            className="bg-red-500 text-white hover:bg-red-600"
+                            onClick={() => {
+                                if (uuid) {
+                                    removeWorkout(uuid);
+                                    navigate('/view-workouts');
+                                }
+                            }}
+                        >
                             Delete Workout
                         </AlertDialogAction>
                     </AlertDialogFooter>

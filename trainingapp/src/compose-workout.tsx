@@ -15,7 +15,6 @@ import {
 } from './components/ui/card';
 import { useState } from 'react';
 import { Button } from './components/ui/button';
-import { Workout } from '@/workout';
 import { useNavigate, useOutletContext } from "react-router";
 import {
   Field,
@@ -23,79 +22,57 @@ import {
   FieldError,
 } from "@/components/ui/field";
 
-/**
- * @returns an array with all names of ingridients with the given @type
- */
-
-
 type ExerciseOption = {
   label: string;
   value: string;
+};
+
+type WorkoutDraft = {
+  warmup: ExerciseOption;
+  exercises: Record<string, ExerciseOption>;
+  cooldown: ExerciseOption;
 }
 
 type PropType = {
-  addWorkout: (workout: Workout) => void;
+  setWorkoutDraft: (draft: WorkoutDraft) => void;
 };
 
-function ComposeWorkout( ) {
-  const { addWorkout } = useOutletContext<PropType>();
+function ComposeWorkout() {
+  const { setWorkoutDraft } = useOutletContext<PropType>();
   const exercises = useFetchExercises();
 
-  const [warmup, setWarmup] = useState<ExerciseOption|null>(null);
+  const [warmup, setWarmup] = useState<ExerciseOption | null>(null);
   const [selectedExercise, setExercises] = useState<Record<string, ExerciseOption>>({});
-  const [cooldown, setCooldown] = useState<ExerciseOption|null>(null);
+  const [cooldown, setCooldown] = useState<ExerciseOption | null>(null);
   const [showError, setShowError] = useState(false);
 
   console.log(selectedExercise);
-  
+
   const navigate = useNavigate();
-  
-  //Gör API-övningar till select alternativ
+
+  // Gör API-övningar till select-alternativ
   const exerciseOptions: ExerciseOption[] = exercises.map((ex) => ({
     value: ex.name,
     label: ex.name,
   }));
+
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setShowError(true);
-   
+
     if (
       warmup &&
       Object.keys(selectedExercise).length >= 2 &&
       cooldown
     ) {
-      let workout = new Workout();
-
-      workout= workout.add(warmup.value, {
-        name: warmup.label,
-        category: 'warmup',
-        duration: 10,
-      });
-
-      Object.keys(selectedExercise).forEach((name) => {
-        workout = workout.add(name, {
-          name: selectedExercise[name].label,
-          category: 'exercise',
-          duration: 15,
-        });
-       })
-
-       workout= workout.add(cooldown.value, {
-        name: cooldown.label,
-        category: 'cooldown',
-        duration: 10,
-      });
-
-      addWorkout(workout);
-
-      setWarmup(null);
-      setExercises({});
-      setCooldown(null);
-    
-
-      setShowError(false);
-      navigate(`/view-workouts/new/${workout.uuid}`);
-      } 
+      setWorkoutDraft({
+        warmup: warmup,
+        exercises: selectedExercise,
+        cooldown: cooldown,
+      })
+      
+      navigate('/configure-workout');
+    }
   }
 
   return (
@@ -119,44 +96,46 @@ function ComposeWorkout( ) {
             <FieldLabel className="text-base font-semibold">
               Choose at least two exercises
             </FieldLabel>
+
             {showError && Object.keys(selectedExercise).length < 2 && (
               <FieldError>Choose at least two exercises.</FieldError>
             )}
 
             <div className="mt-2 grid grid-cols-2 gap-2">
               {exerciseOptions.map((exercise) => (
-                <div 
-                  key={exercise.value}
-                  className="flex items-center gap-2"
-                >
-                <Checkbox 
-                  id={exercise.value} 
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      setExercises({
-                        ...selectedExercise,
-                        [exercise.value]: exercise,
-                      })
-                    } else {
-                      const remainingExercises = Object.fromEntries(
-                        Object.entries(selectedExercise)
-                        .filter(([key]) => key !== exercise.value)
-                      );
+                <div key={exercise.value}>
 
-                      setExercises(remainingExercises);
-                    }
-                  }}
-                />
-                <label htmlFor={exercise.value}>
-                  {exercise.label}
-                </label>
-              </div>
-            ))}
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id={exercise.value}
+                      checked={!!selectedExercise[exercise.value]}
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          setExercises({
+                            ...selectedExercise,
+                            [exercise.value]: exercise,
+                          });
+                        } else {
+                          const remainingExercises = Object.fromEntries(
+                            Object.entries(selectedExercise)
+                              .filter(([key]) => key !== exercise.value)
+                          );
+
+                          setExercises(remainingExercises);
+                        }
+                      }}
+                    />
+
+                    <label htmlFor={exercise.value}>
+                      {exercise.label}
+                    </label>
+                  </div>
+
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
 
-      
-       
           <SelectExercise
             label="Choose cooldown"
             value={cooldown}
@@ -164,13 +143,10 @@ function ComposeWorkout( ) {
             onValueChange={setCooldown}
             showError={showError}
           />
-          <div>
-           
-          </div>
-         
+
           <div className="mt-4 flex justify-end">
             <Button type="submit">
-              Save workout
+              Next
             </Button>
           </div>
         </form>
@@ -181,11 +157,12 @@ function ComposeWorkout( ) {
 
 type SelectExerciseType = {
   label: string;
-  value: ExerciseOption|null;
-  onValueChange: (value: ExerciseOption|null) => void;
+  value: ExerciseOption | null;
+  onValueChange: (value: ExerciseOption | null) => void;
   options: ExerciseOption[];
   showError: boolean;
 };
+
 function SelectExercise({
   label,
   value,
@@ -194,7 +171,7 @@ function SelectExercise({
   showError,
 }: SelectExerciseType) {
   const invalid = !value && showError;
-  
+
   return (
     <Field data-invalid={invalid}>
       <FieldLabel htmlFor={label} className="text-base font-semibold">
@@ -203,8 +180,8 @@ function SelectExercise({
           *
         </span>
       </FieldLabel>
+
       <Select
-        id={label}
         name={label}
         value={value?.value || ""}
         required
@@ -216,6 +193,7 @@ function SelectExercise({
         <SelectTrigger aria-invalid={invalid} className="w-sm">
           <SelectValue placeholder="Make a choice" />
         </SelectTrigger>
+
         <SelectContent>
           {options.map((option) => (
             <SelectItem value={option.value} key={option.value}>
@@ -224,9 +202,9 @@ function SelectExercise({
           ))}
         </SelectContent>
       </Select>
+
       {invalid && <FieldError>Gör ett val.</FieldError>}
     </Field>
-    
   );
 }
 

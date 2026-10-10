@@ -5,6 +5,9 @@ type ExerciseInfo = {
   name: string;
   category: string;
   duration?: number;
+  sets?: number;
+  reps?: number;
+  rest?: number;
 };
 type WorkoutInfo = {
   totalDuration: number;

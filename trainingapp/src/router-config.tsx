@@ -13,6 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./components/ui/card";
+import ConfigureWorkout from "./configure-workout";
 
 function Home() {
   return (
@@ -55,6 +56,10 @@ const routerConfig: RouteObject[] = [
       {
         path: "compose-workout",
         Component: ComposeWorkout,
+      },
+      {
+        path: "configure-workout",
+        Component: ConfigureWorkout,
       },
       {
         path: "view-workouts",

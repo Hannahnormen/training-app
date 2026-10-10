@@ -9,9 +9,19 @@ import {
   NavigationMenuItem 
 } from "@/components/ui/navigation-menu"
 
+type ExerciseOption = {
+  label: string;
+  value: string;
+};
 
+type WorkoutDraft = {
+  warmup: ExerciseOption;
+  exercises: Record<string, ExerciseOption>;
+  cooldown: ExerciseOption;
+};
 
 function App() {
+  const [workoutDraft, setWorkoutDraft] = useState<WorkoutDraft | null >(null);
   // React ska komma ihåg alla skapade workouts
   const [workouts, setWorkouts] = useState<Workout[]>(() => {
     let existingWorkout = new Workout();
@@ -54,6 +64,12 @@ function App() {
     setWorkouts([...workouts, workout]);
   }
 
+  function removeWorkout(uuid: string) {
+    setWorkouts((currentWorkouts) => 
+      currentWorkouts.filter((workout) => workout.uuid !== uuid)
+    );
+  }
+
   return (
     <>
 
@@ -87,7 +103,15 @@ function App() {
       />
     </div>
       <main>
-        <Outlet context={{ workouts, addWorkout }} />
+        <Outlet 
+          context={{ 
+            workouts, 
+            addWorkout, 
+            removeWorkout,
+            workoutDraft,
+            setWorkoutDraft
+          }} 
+        />
       </main>
     </div>
     </>
