@@ -72,12 +72,6 @@ function ComposeWorkout( ) {
         duration: 10,
       });
 
-      workout= workout.add(cooldown.value, {
-        name: cooldown.label,
-        category: 'cooldown',
-        duration: 10,
-      });
-
       Object.keys(selectedExercise).forEach((name) => {
         workout = workout.add(name, {
           name: selectedExercise[name].label,
@@ -85,6 +79,12 @@ function ComposeWorkout( ) {
           duration: 15,
         });
        })
+
+       workout= workout.add(cooldown.value, {
+        name: cooldown.label,
+        category: 'cooldown',
+        duration: 10,
+      });
 
       addWorkout(workout);
 
@@ -94,7 +94,7 @@ function ComposeWorkout( ) {
     
 
       setShowError(false);
-      navigate(`/view-workout/new/${workout.uuid}`);
+      navigate(`/view-workouts/new/${workout.uuid}`);
       } 
   }
 

@@ -61,6 +61,11 @@ const routerConfig: RouteObject[] = [
         Component: ViewWorkouts,
       },
       {
+        path: "view-workouts/new/:uuid",
+        Component: ViewWorkouts,
+
+      },
+      {
         path: "*",
         Component: PageNotFound,
       },

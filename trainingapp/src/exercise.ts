@@ -17,7 +17,7 @@ type ExerciseInventory = Readonly<
   }
 >;
 const exerciseInventory: ExerciseInventory = baseExerciseInventory as ExerciseInventory;
-type PartialExerciseInventory = Readonly<Record<keyof ExerciseInventory, ExerciseInfo>>;
+type PartialExerciseInventory = Readonly<Record<keyof ExerciseInventory, Exercise>>;
 
 // recursively freeze the data structure.
 function deepFreeze(obj: object) {

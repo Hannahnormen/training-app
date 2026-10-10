@@ -88,15 +88,11 @@ function ViewWorkouts() {
               </h4>
               <div className="flex flex-col gap-2">
                 {exercises.map((exercise, index) =>(
-                  <div key={index} className='flex justify-between items-center'>
-                    <div>
-                      <span>
-                        {exercise.name}
-                      </span>
-                      <span>
+                  <div key={index} className='flex items-center gap-3'>
+                      <span>{exercise.name}</span>
+                      <Badge variant="outline">
                         {exercise.category || "Exercise"}
-                      </span>
-                    </div>
+                      </Badge>
 
                     <Badge>
                       {exercise.duration ?? 0} min
