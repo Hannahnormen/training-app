@@ -20,15 +20,18 @@ import {
 type PropsType = { 
     workouts: Workout[];
     removeWorkout: (uuid: string) => void;
+    incrementCompleted?: (minutes: number) => void;
 };
 
 function DoWorkout() {
-    const { workouts, removeWorkout } = useOutletContext<PropsType>();
+    const { workouts, removeWorkout , incrementCompleted} = useOutletContext<PropsType>();
     const { uuid } = useParams();
     const navigate = useNavigate();
+  
 
     const workout = workouts.find((w) => w.uuid === uuid);
     const exercises = workout ? Object.values(workout.getExercises()): [];
+    const workoutMinutes = exercises.reduce((sum, ex) => sum + (ex.duration ?? 0), 0);
 
     const [checkedExercises, setCheckedExercises] = useState<Record<string, boolean>>({});
     const [showFinishDialog, setShowFinishDialog] = useState(false);
@@ -82,7 +85,10 @@ function DoWorkout() {
                 <div>
                     <Button
                         disabled={!allChecked}
-                        onClick={() => setShowFinishDialog(true)}
+                        onClick={() => {
+                            setShowFinishDialog(true);
+                            if (incrementCompleted) incrementCompleted(workoutMinutes);
+                        }}
                     >
                         Finish Workout
                     </Button>
