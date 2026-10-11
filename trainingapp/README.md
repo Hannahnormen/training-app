@@ -41,4 +41,4 @@ npm run dev
 
  * **Do a workout:** Click on "My Workout" in the navigation bar. Choose a workout and click on "Do workout". Check the box for each exercise you finish. When you have finished all exercises you can either choose to keep or remove the active workout.
 
- **The profile**: You can see your profile. When you finish a workout you can see it in your progress bar in the amount of completed workouts.
+ * **The profile**: When you finish a workout you can see your improvements in the profile bar.
