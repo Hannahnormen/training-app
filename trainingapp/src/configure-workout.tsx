@@ -37,7 +37,7 @@ function ConfigureWorkout() {
          Record<string, ExerciseSettings>
     >({});
 
-    console.log(exerciseSettings);
+    const [showError, setShowError] = useState(false);
 
     function updateExercise(
         name: string,
@@ -51,6 +51,31 @@ function ConfigureWorkout() {
             [field]: value === "" ? undefined : Number(value),
             },
         }));
+    }
+
+    function isValidExercise(name: string): boolean {
+        return (
+            !isInvalidField(name, "sets") &&
+            !isInvalidField(name, "reps") &&
+            !isInvalidField(name, "rest")
+        );
+    }
+
+    function isInvalidField(
+        name: string,
+        field: keyof ExerciseSettings
+    ): boolean {
+        const value = exerciseSettings[name]?.[field];
+
+        if (value === undefined || !Number.isInteger(value)) {
+            return true;
+        }
+
+        if (field === "rest") {
+            return value < 0;
+        }
+
+        return value < 1;
     }
 
     if (!workoutDraft) {
@@ -69,52 +94,39 @@ function ConfigureWorkout() {
 
                 {Object.values(workoutDraft.exercises).map((exercise) => (
                     <div key={exercise.value} className="mb-6">
-
                         <p className="font-semibold mb-2">{exercise.label}</p>
-
                         <div className="flex gap-4">
+                            <ExerciseInput
+                                label="Sets"
+                                min={1}
+                                value={exerciseSettings[exercise.value]?.sets}
+                                invalid={showError && isInvalidField(exercise.value, "sets")}
+                                onChange={(value) => updateExercise(exercise.value, "sets", value)}
+                            />
 
-                            <div>
-                                <label>Sets</label>
-                                <Input
-                                type="number"
-                                min="1"
-                                placeholder="Sets"
-                                value={exerciseSettings[exercise.value]?.sets ?? ""}
-                                onChange={(event) =>
-                                    updateExercise(exercise.value, "sets", event.target.value)
-                                }
-                                />
-                            </div>
+                            <ExerciseInput
+                                label="Reps"
+                                min={1}
+                                value={exerciseSettings[exercise.value]?.reps}
+                                invalid={showError && isInvalidField(exercise.value, "reps")}
+                                onChange={(value) => updateExercise(exercise.value, "reps", value)}
+                            />
 
-                            <div>
-                                <label>Reps</label>
-                                <Input
-                                type="number"
-                                min="1"
-                                placeholder="Reps"
-                                value={exerciseSettings[exercise.value]?.reps ?? ""}
-                                onChange={(event) =>
-                                    updateExercise(exercise.value, "reps", event.target.value)
-                                }
-                                />
-                            </div>
+                            <ExerciseInput
+                                label="Rest (seconds)"
+                                min={0}
+                                value={exerciseSettings[exercise.value]?.rest}
+                                invalid={showError && isInvalidField(exercise.value, "rest")}
+                                onChange={(value) => updateExercise(exercise.value, "rest", value)}
+                            />
+                        </div>
 
-                            <div>
-                                <label>Rest (seconds)</label>
-                                <Input
-                                type="number"
-                                min="0"
-                                placeholder="Rest"
-                                value={exerciseSettings[exercise.value]?.rest ?? ""}
-                                onChange={(event) =>
-                                    updateExercise(exercise.value, "rest", event.target.value)
-                                }
-                                onWheel={(event) => event.currentTarget.blur()}
-                                />
-                            </div>
+                            {showError && !isValidExercise(exercise.value) && (
+                                <p className="text-red-500 text-sm mt-2">
+                                    Please enter valid sets, reps and rest values.
+                                </p>
+                            )}
 
-                            </div>
                     </div>
                 ))}
 
@@ -136,6 +148,14 @@ function ConfigureWorkout() {
 
     function handleSave() {
         if (!workoutDraft) return;
+
+        setShowError(true);
+
+        const allValid = Object.keys(workoutDraft.exercises).every(isValidExercise);
+
+        if (!allValid) {
+            return;
+        }
 
         let workout = new Workout();
 
@@ -176,6 +196,38 @@ function ConfigureWorkout() {
         // Gå till det sparade träningspasset
         navigate(`/view-workouts/new/${workout.uuid}`);
     }
+}
+
+type ExerciseInputProps = {
+    label: string;
+    value: number | undefined;
+    min: number;
+    invalid: boolean;
+    onChange: (value: string) => void;
+};
+
+function ExerciseInput({
+    label,
+    value,
+    min,
+    invalid,
+    onChange,
+}: ExerciseInputProps) {
+    return (
+        <div>
+            <label>{label}</label>
+            <Input
+                type="number"
+                min={min}
+                placeholder={label}
+                value={value ?? ""}
+                onChange={(event) => onChange(event.target.value)}
+                onWheel={(event) => event.currentTarget.blur()}
+                aria-invalid={invalid}
+                className={invalid ? "border-red-500" : ""}
+            />
+        </div>
+    );
 }
 
 export default ConfigureWorkout;
