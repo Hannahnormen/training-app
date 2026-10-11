@@ -23,15 +23,8 @@ type WorkoutDraft = {
 
 function App() {
   const [workoutDraft, setWorkoutDraft] = useState<WorkoutDraft | null >(null);
-  const [completedWorkouts, setCompletedWorkouts] = useState<number>(() => {
-    const saved = localStorage.getItem('completedWorkouts');
-    return saved ? JSON.parse(saved) : 0;
-  })
-
-  const [totalMinutes, setTotalMinutes] = useState<number>( () => {
-    const saved = localStorage.getItem('totalMinutes');
-    return saved ? JSON.parse(saved) : 0;
-  });
+  const [completedWorkouts, setCompletedWorkouts] = useState<number>(0);
+  const [totalMinutes, setTotalMinutes] = useState<number>(0);
 
   function incrementCompleted(minutes: number) {
     setCompletedWorkouts((prev) => prev + 1);

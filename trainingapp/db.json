@@ -1,0 +1,71 @@
+{
+  "profile": {
+    "completedWorkouts": 4,
+    "totalMinutes": 300
+  },
+  "workouts": [
+    {
+      "id": "S9N-S2DfWi0",
+      "uuid": "default-workout-id",
+      "exercises": {
+        "Power walk": {
+          "name": "Power walk",
+          "category": "warmup",
+          "duration": 15
+        },
+        "Pushups": {
+          "name": "Pushups",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Pullups": {
+          "name": "Pullups",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Jumping Jacks": {
+          "name": "Jumping Jacks",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Stretching": {
+          "name": "Stretching",
+          "category": "cooldown",
+          "duration": 15
+        }
+      }
+    },
+    {
+      "id": "wdwLli6fc1o",
+      "uuid": "default-workout-id",
+      "exercises": {
+        "Power walk": {
+          "name": "Power walk",
+          "category": "warmup",
+          "duration": 15
+        },
+        "Pushups": {
+          "name": "Pushups",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Pullups": {
+          "name": "Pullups",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Jumping Jacks": {
+          "name": "Jumping Jacks",
+          "category": "exercise",
+          "duration": 15
+        },
+        "Stretching": {
+          "name": "Stretching",
+          "category": "cooldown",
+          "duration": 15
+        }
+      }
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
