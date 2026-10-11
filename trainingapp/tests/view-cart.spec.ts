@@ -1,5 +1,5 @@
 import { test, expect, Locator } from "@playwright/test";
-import { checkCartRow } from "./helper";
+import { checkCartRow } from "../helper";
 const salads = [
   {
     ingredients: [
