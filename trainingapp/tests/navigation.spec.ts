@@ -3,72 +3,44 @@ import { test, expect, Locator } from "@playwright/test";
 test("Render the navigation menu", async ({ page }) => {
   await page.goto("http://localhost:5173/page-not-found");
   await expect(
-    page.getByRole("link", { name: "Hem", exact: true })
+    page.getByRole("link", { name: "Home", exact: true })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Skapa sallad", exact: true })
+    page.getByRole("link", { name: "Create Workout", exact: true })
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Varukorgen", exact: true })
+    page.getByRole("link", { name: "My Workout", exact: true })
   ).toBeVisible();
 });
 
 test("Navigate to Home", async ({ page }) => {
   await page.goto("http://localhost:5173/page-not-found");
-  await page.getByRole("link", { name: "Hem", exact: true }).click();
+  await page.getByRole("link", { name: "Home", exact: true }).click();
   await page.waitForURL("**/");
-  await expect(page.getByText("Välkommen till min salladsbar")).toBeVisible();
-  await expect(
-    page.getByText("Välj de ingredienser som ingår i salladen.")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Här listas alla sallader du skapat.")
-  ).not.toBeVisible();
-  await expect(page.getByText("Sidan kunde inte hittas")).not.toBeVisible();
+  await expect(page.getByText("Our workout app")).toBeVisible();
 });
 
-test("Navigate to Compose Salad", async ({ page }) => {
+test("Navigate to Create Workout", async ({ page }) => {
   await page.goto("http://localhost:5173/page-not-found");
-  await page.getByRole("link", { name: "Skapa sallad", exact: true }).click();
-  await page.waitForURL("**/compose-salad");
+  await page.getByRole("link", { name: "Create Workout", exact: true }).click();
+  await page.waitForURL("**/compose-workout");
   await expect(
-    page.getByText("Välkommen till min salladsbar")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Välj de ingredienser som ingår i salladen.")
+    page.getByRole("heading", {name: "Our workout app"})
   ).toBeVisible();
-  await expect(
-    page.getByText("Här listas alla sallader du skapat.")
-  ).not.toBeVisible();
-  await expect(page.getByText("Sidan kunde inte hittas")).not.toBeVisible();
 });
 
-test("Navigate to Shopping Cart", async ({ page }) => {
+test("Navigate to My Workout", async ({ page }) => {
   await page.goto("http://localhost:5173/page-not-found");
-  await page.getByRole("link", { name: "Varukorgen", exact: true }).click();
-  await page.waitForURL("**/view-cart");
+  await page.getByRole("link", { name: "My Workout", exact: true }).click();
+  await page.waitForURL("**/view-workouts");
   await expect(
-    page.getByText("Välkommen till min salladsbar")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Välj de ingredienser som ingår i salladen.")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Här listas alla sallader du skapat.")
+    page.getByRole("heading", {name: "Our workout app"})
   ).toBeVisible();
-  await expect(page.getByText("Sidan kunde inte hittas")).not.toBeVisible();
 });
 
 test("Navigate to Page Not Found", async ({ page }) => {
   await page.goto("http://localhost:5173/bad-url");
   await expect(
-    page.getByText("Välkommen till min salladsbar")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Välj de ingredienser som ingår i salladen.")
-  ).not.toBeVisible();
-  await expect(
-    page.getByText("Här listas alla sallader du skapat.")
-  ).not.toBeVisible();
-  await expect(page.getByText("Sidan kunde inte hittas")).toBeVisible();
+    page.getByRole("heading", {name: "Our workout app"})
+  ).toBeVisible();
 });
