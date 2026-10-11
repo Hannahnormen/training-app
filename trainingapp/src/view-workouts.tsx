@@ -87,16 +87,27 @@ function ViewWorkouts() {
                 Exercices:
               </h4>
               <div className="flex flex-col gap-2">
-                {exercises.map((exercise, index) =>(
-                  <div key={index} className='flex items-center gap-3'>
+                {exercises.map((exercise, index) => (
+                  <div key={index} className="flex flex-col gap-1">
+
+                    <div className="flex items-center gap-3">
                       <span>{exercise.name}</span>
+
                       <Badge variant="outline">
                         {exercise.category || "Exercise"}
                       </Badge>
 
-                    <Badge>
-                      {exercise.duration ?? 0} min
-                    </Badge>
+                      <Badge>
+                        {exercise.duration ?? 0} min
+                      </Badge>
+                    </div>
+
+                    {exercise.category === "exercise" && (
+                      <p className="text-sm text-gray-500">
+                        {exercise.sets} sets · {exercise.reps} reps · {exercise.rest} sec rest
+                      </p>
+                    )}
+
                   </div>
                 ))}
               </div>
