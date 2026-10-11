@@ -1,43 +1,18 @@
 import { Button } from './components/ui/button';
-import { Outlet, useOutletContext, useParams, useNavigate } from "react-router";
-import {useState } from 'react';
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from './components/ui/card';
-
+import { useOutletContext, useParams, useNavigate } from 'react-router';
 import type { Workout } from './workout';
 import { Badge } from "@/components/ui/badge";
-import { safeFetchJson } from './use-fetch-exercises';
 
-type PropsType = { 
-  workouts: Workout[] 
-  clearWorkouts?: () => void;
+type PropsType = {
+  workouts: Workout[];
 };
-
-type WorkoutResponseType = {
-  status: 'confirmed' | 'canceled';
-  timestamp: string;
-  uuid: string;
-  totalDuration: number;
-  workouts: string[][];
-};
-
-type ContextType = { workouts: Workout[]; clearWorkouts(): void };
 
 function ViewWorkouts() {
   const { workouts } = useOutletContext<PropsType>();
@@ -84,7 +59,7 @@ function ViewWorkouts() {
 
             <CardContent>
               <h4>
-                Exercices:
+                Exercises:
               </h4>
               <div className="flex flex-col gap-2">
                 {exercises.map((exercise, index) => (
@@ -120,65 +95,5 @@ function ViewWorkouts() {
     </div>
   );
 }
-
-
-
-
-/*
- * static content, rendered when the file is loaded.
- */
-function SaveWorkotButton({workouts, clearWorkouts}: { workouts: Workout[]; clearWorkouts?: () => void}) {
-  const [confirmation, setConfirmation] = useState<WorkoutResponseType | undefined>(undefined);
-  const navigate = useNavigate();
-
-  async function saveToServer() {
-    const workoutData = workouts.map((workout) =>
-      Object.keys(workout.getExercises())
-    );
-    const conf = await safeFetchJson<WorkoutResponseType>(
-      'http://localhost:8080/view-workouts', 
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json'},
-        body: JSON.stringify(workoutData)
-      }
-      
-    );
-    setConfirmation(conf);
-
-  }
   
-  return (
-    <AlertDialog>
-      <AlertDialogTrigger>
-        <Button onClick={saveToServer}>Save Workout</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Workout has been saved</AlertDialogTitle>
-          <AlertDialogDescription>
-            <div>Total time: {confirmation?.totalDuration} min</div>
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel
-            onClick={() => {
-              if (clearWorkouts) {
-                clearWorkouts();
-                navigate('/view-workout');
-              }
-              
-            }}
-          >
-            Continue
-          </AlertDialogCancel>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-  )
-  
-
-}
-  
-
 export default ViewWorkouts;
