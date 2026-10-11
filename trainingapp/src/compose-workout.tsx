@@ -39,7 +39,7 @@ type PropType = {
 
 function ComposeWorkout() {
   const { setWorkoutDraft } = useOutletContext<PropType>();
-  const exercises = useFetchExercises();
+  const { data: exercises, error } = useFetchExercises();
 
   const [warmup, setWarmup] = useState<ExerciseOption | null>(null);
   const [selectedExercise, setExercises] = useState<Record<string, ExerciseOption>>({});
@@ -78,6 +78,11 @@ function ComposeWorkout() {
   return (
     <Card>
       <CardHeader>
+        {error && (
+          <div className="mx-6 mb-4 rounded-md bg-red-100 p-3 text-red-700">
+            {error}
+          </div>
+        )}
         Create Workout
         Choose the exercises you want in your workout
       </CardHeader>

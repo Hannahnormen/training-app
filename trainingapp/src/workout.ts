@@ -26,9 +26,6 @@ class Workout {
     return this.exercises;
   }
 
-  /**
-   * @returns a new salad object with the ingredient @name added.
-   */
   add(name: string, info: ExerciseInfo): Workout {
     const newExercises = {
       ...this.exercises,
@@ -37,9 +34,6 @@ class Workout {
     return new Workout(newExercises, this.uuid);
   }
 
-  /**
-   * @returns a new salad object with the ingredient @name removed.
-   */
   remove(name: string): Workout {
   const remainingExercises = Object.fromEntries(
     Object.entries(this.exercises).filter(([key]) => key !== name)
@@ -48,9 +42,6 @@ class Workout {
   return new Workout(remainingExercises, this.uuid);
 }
 
-  /**
-   * @returns the price of this salad.
-   */
   totalDuration(): number {
     return Object.values(this.exercises).reduce(
       (total, exercise) => total + (exercise.duration ?? 0),
@@ -58,23 +49,12 @@ class Workout {
     );
   }
 
-  /**
-   * @returns the aggregated info of of all ingredients.
-   * vegan is true if all ingredients are vegan.
-   * lactose and gluten is true if any of the ingredients contain the allergenic
-   */
   info(): WorkoutInfo {
     return {
       totalDuration: this.totalDuration(),
     }
   }
 
-  /**
-   * @param json is a JSON string with an array of Salad objects
-   * @returns an array of Salad objects.
-   * @throws if json is not an array, or any of the objects do not
-   * have the ingredients attribute
-   */
   static parse(json: string): Workout[] {
     const list = JSON.parse(json);
 

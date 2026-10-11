@@ -25,14 +25,31 @@ async function fetchExercises(): Promise<Exercise[]> {
 // Funktionen använder andra hooks, som useState och useEffect
 function useFetchExercises() {
   const [data, setData] = useState<Exercise[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchExercises().then((exercises) => {
-      setData(exercises);
-    });
+    let ignore = false;
+
+    fetchExercises()
+      .then((exercises) => {
+        if (!ignore) {
+          setData(exercises);
+          setError(null);
+        }
+      })
+      .catch((err) => {
+        if (!ignore) {
+          setError("Could not load exercises. Please try again later.");
+          console.error("Failed to fetch exercises:", err);
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
   }, []);
 
-  return data;
+  return { data, error };
 }
 
 export { useFetchExercises, safeFetchJson, fetchExercises };
