@@ -3,13 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/*
-  Feel free to use a custom theme, for example from 
-  https://themux.vercel.app/shadcn-themes
 
-  The theme in this file is "Ocean Breeze" from:
-  https://tweakcn.com/editor/theme
-*/
 :root {
   --background: oklch(0.9751 0.0127 244.2507);
   --foreground: oklch(0.3729 0.0306 259.7328);
@@ -169,9 +163,7 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
-/*
-  Do not remove the lines bellow if you change the theme.
-*/
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

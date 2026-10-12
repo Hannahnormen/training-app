@@ -10,7 +10,7 @@ async function safeFetchJson<T>(url: string | URL, init?: RequestInit) {
   });
 }
 
-// API:t skickar tillbaka en array av Exercise-objekt.
+// APIt skickar tillbaka en array av Exercise-objekt.
 async function fetchExercises(): Promise<Exercise[]> {
   const url = 'https://api.api-ninjas.com/v1/exercises';
   const apiKey = import.meta.env.VITE_API_KEY;

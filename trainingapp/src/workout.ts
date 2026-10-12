@@ -18,7 +18,7 @@ class Workout {
     readonly uuid: string;
     
   constructor(init?: Record<string, ExerciseInfo>, uuid?: string) {
-    this.exercises = init ?? {}; // använd init om den finns, annars ett tomt objekt
+    this.exercises = init ?? {}; 
     this.uuid = uuid ?? uuidv4();
   }
 

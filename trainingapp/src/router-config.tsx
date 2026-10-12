@@ -70,13 +70,14 @@ const routerConfig: RouteObject[] = [
         Component: ViewWorkouts,
 
       },
-      {
-        path: "*",
-        Component: PageNotFound,
-      },
+      
       {
         path: "do-workout/:uuid",
         Component: DoWorkout,
+      },
+      {
+        path: "*",
+        Component: PageNotFound,
       },
     ],
   },
